@@ -182,15 +182,14 @@ services:
           cd /data/keys
           allora-keys
         fi
-        allora-node --role=head --peer-db=/data/peerdb --function-db=/data/function-db  \
+        allora-node --role=head --peer-db=/data/peerdb --function-db=/data/function-db \
           --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9010 --rest-api=:6000 \
+          --private-key=/data/keys/priv.bin --log-level=debug --port=9000 --rest-api=:5001 \
           --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
     ports:
-      - "6000:6000"
+      - "5001:5001"
     volumes:
       - ./head-data:/data
-    working_dir: /data
     networks:
       eth-model-local:
         aliases:
