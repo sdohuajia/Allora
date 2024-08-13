@@ -101,9 +101,8 @@ function install_allora_node() {
         cd $HOME && git clone https://github.com/allora-network/basic-coin-prediction-node
         cd basic-coin-prediction-node
 
-        mkdir workers
-        mkdir workers/worker-1 workers/worker-2 workers/worker-3 head-data
-        sudo chmod -R 777 workers/worker-1 workers/worker-2 workers/worker-3 head-data
+        mkdir -p workers/worker-{1..3} head-data
+        sudo chmod -R 777 workers/worker-{1..3} head-data
 
         # Create head keys
         sudo docker run -it --entrypoint=bash -v "$PWD/head-data":/data alloranetwork/allora-inference-base:latest -c "mkdir -p /data/keys && (cd /data/keys && allora-keys)"
@@ -183,26 +182,19 @@ services:
           allora-keys
         fi
         allora-node --role=head --peer-db=/data/peerdb --function-db=/data/function-db \
-          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9000 --rest-api=:5001 \
-          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
-    ports:
-      - "5001:5001"
+          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace --identity /data/keys
     volumes:
       - ./head-data:/data
     networks:
       eth-model-local:
         aliases:
           - head
-        ipv4_address: 172.22.0.100
+        ipv4_address: 172.22.0.6
+    ports:
+      - "8080:8080"
 
-  worker-1:
-    container_name: worker-1
-    environment:
-      - INFERENCE_API_ADDRESS=http://inference:8000
-      - HOME=/data
-      - WALLET_SEED_PHRASE=${WALLET_SEED_PHRASE}
-      - HEAD_ID=${HEAD_ID}
+  worker1:
+    container_name: worker1
     image: alloranetwork/allora-inference-base-worker:latest
     entrypoint:
       - "/bin/bash"
@@ -214,27 +206,18 @@ services:
           cd /data/keys
           allora-keys
         fi
-        allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
-          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9020 --rest-api=:6001 \
-          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
-    ports:
-      - "6001:6001"
+        allora-node --role=worker --head-id=$HEAD_ID --peer-db=/data/peerdb --function-db=/data/function-db \
+          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace --identity /data/keys
     volumes:
       - ./workers/worker-1:/data
     networks:
       eth-model-local:
         aliases:
-          - worker-1
-        ipv4_address: 172.22.0.101
+          - worker1
+        ipv4_address: 172.22.0.7
 
-  worker-2:
-    container_name: worker-2
-    environment:
-      - INFERENCE_API_ADDRESS=http://inference:8000
-      - HOME=/data
-      - WALLET_SEED_PHRASE=${WALLET_SEED_PHRASE}
-      - HEAD_ID=${HEAD_ID}
+  worker2:
+    container_name: worker2
     image: alloranetwork/allora-inference-base-worker:latest
     entrypoint:
       - "/bin/bash"
@@ -246,27 +229,18 @@ services:
           cd /data/keys
           allora-keys
         fi
-        allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
-          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9021 --rest-api=:6002 \
-          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
-    ports:
-      - "6002:6002"
+        allora-node --role=worker --head-id=$HEAD_ID --peer-db=/data/peerdb --function-db=/data/function-db \
+          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace --identity /data/keys
     volumes:
       - ./workers/worker-2:/data
     networks:
       eth-model-local:
         aliases:
-          - worker-2
-        ipv4_address: 172.22.0.102
+          - worker2
+        ipv4_address: 172.22.0.8
 
-  worker-3:
-    container_name: worker-3
-    environment:
-      - INFERENCE_API_ADDRESS=http://inference:8000
-      - HOME=/data
-      - WALLET_SEED_PHRASE=${WALLET_SEED_PHRASE}
-      - HEAD_ID=${HEAD_ID}
+  worker3:
+    container_name: worker3
     image: alloranetwork/allora-inference-base-worker:latest
     entrypoint:
       - "/bin/bash"
@@ -278,45 +252,42 @@ services:
           cd /data/keys
           allora-keys
         fi
-        allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
-          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9022 --rest-api=:6003 \
-          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
-    ports:
-      - "6003:6003"
+        allora-node --role=worker --head-id=$HEAD_ID --peer-db=/data/peerdb --function-db=/data/function-db \
+          --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace --identity /data/keys
     volumes:
       - ./workers/worker-3:/data
     networks:
       eth-model-local:
         aliases:
-          - worker-3
-        ipv4_address: 172.22.0.103
+          - worker3
+        ipv4_address: 172.22.0.9
 
 networks:
   eth-model-local:
+    driver: bridge
     ipam:
       config:
         - subnet: 172.22.0.0/16
 EOL
 
-    # Start Docker Compose
-    sudo docker-compose up -d
+        echo "docker-compose.yml 文件已生成."
 
-    # Save the stage
-    echo "done" > ~/.docker_setup_stage
+        # Start containers
+        docker-compose up -d
+    fi
 }
 
 # 启动 Allora 节点
 function start_allora_node() {
     echo "启动 Allora 节点"
-    sudo docker-compose up -d
+    docker-compose up -d
 }
 
 # 停止 Allora 节点
 function stop_allora_node() {
     echo "停止 Allora 节点"
-    sudo docker-compose down
+    docker-compose down
 }
 
-# 运行主菜单函数
+# 启动主菜单
 main_menu
