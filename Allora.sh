@@ -281,12 +281,20 @@ EOL
 function start_allora_node() {
     echo "启动 Allora 节点"
     docker-compose up -d
+
+    # 等待用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..." -n1 -s
+    main_menu
 }
 
 # 停止 Allora 节点
 function stop_allora_node() {
     echo "停止 Allora 节点"
     docker-compose down
+
+    # 等待用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..." -n1 -s
+    main_menu
 }
 
 # 启动主菜单
