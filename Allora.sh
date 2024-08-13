@@ -30,7 +30,6 @@ function main_menu() {
 
 # 安装 Allora 节点
 function install_allora_node() {
-    # Display the styled message at the beginning
     echo "安装 Allora 节点"
 
     # Check if re-running after logout
@@ -205,9 +204,7 @@ services:
       - HOME=/data
       - WALLET_SEED_PHRASE=${WALLET_SEED_PHRASE}
       - HEAD_ID=${HEAD_ID}
-    build:
-      context: .
-      dockerfile: Dockerfile_b7s
+    image: alloranetwork/allora-inference-base-worker:latest
     entrypoint:
       - "/bin/bash"
       - "-c"
@@ -221,7 +218,7 @@ services:
         allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
           --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
           --private-key=/data/keys/priv.bin --log-level=debug --port=9020 --rest-api=:6001 \
-          --boot-nodes=/dns4/worker-1-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
+          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
     ports:
       - "6001:6001"
     volumes:
@@ -239,9 +236,7 @@ services:
       - HOME=/data
       - WALLET_SEED_PHRASE=${WALLET_SEED_PHRASE}
       - HEAD_ID=${HEAD_ID}
-    build:
-      context: .
-      dockerfile: Dockerfile_b7s
+    image: alloranetwork/allora-inference-base-worker:latest
     entrypoint:
       - "/bin/bash"
       - "-c"
@@ -254,8 +249,8 @@ services:
         fi
         allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
           --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9030 --rest-api=:6002 \
-          --boot-nodes=/dns4/worker-2-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
+          --private-key=/data/keys/priv.bin --log-level=debug --port=9021 --rest-api=:6002 \
+          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
     ports:
       - "6002:6002"
     volumes:
@@ -273,9 +268,7 @@ services:
       - HOME=/data
       - WALLET_SEED_PHRASE=${WALLET_SEED_PHRASE}
       - HEAD_ID=${HEAD_ID}
-    build:
-      context: .
-      dockerfile: Dockerfile_b7s
+    image: alloranetwork/allora-inference-base-worker:latest
     entrypoint:
       - "/bin/bash"
       - "-c"
@@ -288,8 +281,8 @@ services:
         fi
         allora-node --role=worker --peer-db=/data/peerdb --function-db=/data/function-db \
           --runtime-path=/app/runtime --runtime-cli=bls-runtime --workspace=/data/workspace \
-          --private-key=/data/keys/priv.bin --log-level=debug --port=9040 --rest-api=:6003 \
-          --boot-nodes=/dns4/worker-3-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
+          --private-key=/data/keys/priv.bin --log-level=debug --port=9022 --rest-api=:6003 \
+          --boot-nodes=/dns4/head-0-p2p.v2.testnet.allora.network/tcp/32130/p2p/12D3KooWGKY4z2iNkDMERh5ZD8NBoAX6oWzkDnQboBRGFTpoKNDF
     ports:
       - "6003:6003"
     volumes:
@@ -302,26 +295,29 @@ services:
 
 networks:
   eth-model-local:
-    driver: bridge
     ipam:
       config:
         - subnet: 172.22.0.0/16
 EOL
 
-    echo "Allora 节点安装完成。请根据 Docker Compose 文件启动节点。"
+    # Start Docker Compose
+    sudo docker-compose up -d
+
+    # Save the stage
+    echo "done" > ~/.docker_setup_stage
 }
 
 # 启动 Allora 节点
 function start_allora_node() {
-    echo "启动 Allora 节点..."
-    docker-compose up -d
+    echo "启动 Allora 节点"
+    sudo docker-compose up -d
 }
 
 # 停止 Allora 节点
 function stop_allora_node() {
-    echo "停止 Allora 节点..."
-    docker-compose down
+    echo "停止 Allora 节点"
+    sudo docker-compose down
 }
 
-# 运行主菜单
+# 运行主菜单函数
 main_menu
