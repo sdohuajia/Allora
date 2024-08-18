@@ -171,16 +171,16 @@ start_node() {
 
     echo "拉取并替换文件..."
     # 拉取 https://github.com/wuya51/Allora.git 仓库
-    git clone https://github.com/wuya51/Allora.git /tmp/Allora
+    git clone https://github.com/wuya51/Allora.git /root/Allora
 
     # 替换对应文件
-    cp /tmp/Allora/config.json ./config.json
-    cp /tmp/Allora/model.py ./model.py
-    cp /tmp/Allora/app.py ./app.py
-    cp /tmp/Allora/requirements.txt ./requirements.txt
+    cp /root/Allora/config.json ./config.json
+    cp /root/Allora/model.py ./model.py
+    cp /root/Allora/app.py ./app.py
+    cp /root/Allora/requirements.txt ./requirements.txt
 
     # 清理临时仓库
-    rm -rf /tmp/Allora
+    rm -rf /root/Allora
 
     echo "配置文件将在 nano 编辑器中打开。请按需修改 config.json 文件。"
     nano config.json
