@@ -106,6 +106,27 @@ install_allora_node() {
             ;;
     esac
 
+    # 钱包恢复或新建选择
+    echo "请选择操作："
+    echo "1) 恢复钱包"
+    echo "2) 新建钱包"
+    read -p "输入 1 或 2: " wallet_choice
+
+    case $wallet_choice in
+        1)
+            echo "请输入助记词密码进行恢复："
+            allorad keys add testkey --recover
+            ;;
+        2)
+            echo "正在新建钱包..."
+            allorad keys add testkey
+            ;;
+        *)
+            echo "无效选择，请输入 1 或 2。"
+            ;;
+    esac
+
+    echo "操作已完成。请重新登录以使 Docker 权限和 Go 环境变量更改生效。"
     read -p "按任意键返回到主菜单..." -n1 -s
     main_menu
 }
@@ -138,30 +159,6 @@ handle_allora() {
     git clone https://github.com/allora-network/allora-chain.git
     cd allora-chain && make all
     allorad version
-
-    # 钱包恢复或新建选择
-    echo "请选择操作："
-    echo "1) 恢复钱包"
-    echo "2) 新建钱包"
-    read -p "输入 1 或 2: " wallet_choice
-
-    case $wallet_choice in
-        1)
-            echo "请输入助记词密码进行恢复："
-            allorad keys add testkey --recover
-            ;;
-        2)
-            echo "正在新建钱包..."
-            allorad keys add testkey
-            ;;
-        *)
-            echo "无效选择，请输入 1 或 2。"
-            sleep 2
-            handle_allora
-            ;;
-    esac
-
-    echo "Allora 处理和钱包操作已完成。请重新登录以使 Docker 权限和 Go 环境变量更改生效。"
 }
 
 # 启动节点
