@@ -166,6 +166,19 @@ start_node() {
     git clone https://github.com/allora-network/basic-coin-prediction-node
     cd basic-coin-prediction-node
 
+    echo "拉取并替换文件..."
+    # 拉取 https://github.com/wuya51/Allora.git 仓库
+    git clone https://github.com/wuya51/Allora.git /tmp/Allora
+
+    # 替换对应文件
+    cp /tmp/Allora/config.json ./config.json
+    cp /tmp/Allora/model.py ./model.py
+    cp /tmp/Allora/app.py ./app.py
+    cp /tmp/Allora/requirements.txt ./requirements.txt
+
+    # 清理临时仓库
+    rm -rf /tmp/Allora
+
     echo "配置文件将在 nano 编辑器中打开。请按需修改 config.json 文件。"
     nano config.json
 
