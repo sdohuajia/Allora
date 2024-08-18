@@ -12,9 +12,9 @@ main_menu() {
     clear
     echo "脚本由大赌社区哈哈哈哈编写，推特 @ferdie_jhovie，免费开源，请勿相信收费"
     echo "================================================================"
-    echo "节点社区 Telegram 群组: https://t.me/niuwuriji"
-    echo "节点社区 Telegram 频道: https://t.me/niuwuriji"
-    echo "节点社区 Discord 社群: https://discord.gg/GbMV5EcNWF"
+    echo "节点社区 Telegram 群组:https://t.me/niuwuriji"
+    echo "节点社区 Telegram 频道:https://t.me/niuwuriji"
+    echo "节点社区 Discord 社群:https://discord.gg/GbMV5EcNWF"
     echo "退出脚本，请按键盘ctrl c退出即可"
     echo "1) 安装 Allora 节点"
     echo "2) 启动节点"
@@ -23,7 +23,7 @@ main_menu() {
 
     case $option in
         1)
-            install_and_setup_allora
+            install_allora_node
             ;;
         2)
             start_node
@@ -39,8 +39,8 @@ main_menu() {
     esac
 }
 
-# 安装并设置 Allora 节点
-install_and_setup_allora() {
+# 安装 Allora 节点
+install_allora_node() {
     echo "正在更新和升级现有包..."
     sudo apt update && sudo apt upgrade -y
 
@@ -87,7 +87,6 @@ install_and_setup_allora() {
 
     echo "所有依赖项、Python3、Docker、Docker-Compose、Go 已成功安装或更新。"
 
-    # 询问用户是否执行 Allora 处理
     echo "是否需要检查并处理 Allora？"
     echo "1) 是"
     echo "2) 否"
@@ -95,54 +94,7 @@ install_and_setup_allora() {
 
     case $choice in
         1)
-            if [ -d "$HOME/allora-chain" ]; then
-                echo "检测到 Allora 已安装。是否删除旧文件并重新克隆？"
-                echo "1) 删除旧文件并重新克隆"
-                echo "2) 保留旧文件"
-                read -p "输入 1 或 2: " sub_choice
-                case $sub_choice in
-                    1)
-                        echo "正在删除旧文件并重新克隆 Allora..."
-                        cd $HOME && rm -rf allora-chain
-                        ;;
-                    2)
-                        echo "保留旧文件，不进行重新克隆。"
-                        ;;
-                    *)
-                        echo "无效选择，请输入 1 或 2。"
-                        sleep 2
-                        install_and_setup_allora
-                        ;;
-                esac
-            else
-                echo "Allora 未安装，正在克隆..."
-            fi
-
-            git clone https://github.com/allora-network/allora-chain.git
-            cd allora-chain && make all
-            allorad version
-
-            # 钱包恢复或新建选择
-            echo "请选择操作："
-            echo "1) 恢复钱包"
-            echo "2) 新建钱包"
-            read -p "输入 1 或 2: " wallet_choice
-
-            case $wallet_choice in
-                1)
-                    echo "请输入助记词密码进行恢复："
-                    allorad keys add testkey --recover
-                    ;;
-                2)
-                    echo "正在新建钱包..."
-                    allorad keys add testkey
-                    ;;
-                *)
-                    echo "无效选择，请输入 1 或 2。"
-                    ;;
-            esac
-
-            echo "Allora 处理和钱包操作已完成。请重新登录以使 Docker 权限和 Go 环境变量更改生效。"
+            handle_allora
             ;;
         2)
             echo "跳过 Allora 处理。"
@@ -150,12 +102,66 @@ install_and_setup_allora() {
         *)
             echo "无效选择，请输入 1 或 2。"
             sleep 2
-            install_and_setup_allora
+            install_allora_node
             ;;
     esac
 
     read -p "按任意键返回到主菜单..." -n1 -s
     main_menu
+}
+
+# 处理 Allora
+handle_allora() {
+    if [ -d "$HOME/allora-chain" ]; then
+        echo "检测到 Allora 已安装。是否删除旧文件并重新克隆？"
+        echo "1) 删除旧文件并重新克隆"
+        echo "2) 保留旧文件"
+        read -p "输入 1 或 2: " sub_choice
+        case $sub_choice in
+            1)
+                echo "正在删除旧文件并重新克隆 Allora..."
+                cd $HOME && rm -rf allora-chain
+                ;;
+            2)
+                echo "保留旧文件，不进行重新克隆。"
+                ;;
+            *)
+                echo "无效选择，请输入 1 或 2。"
+                sleep 2
+                handle_allora
+                ;;
+        esac
+    else
+        echo "Allora 未安装，正在克隆..."
+    fi
+
+    git clone https://github.com/allora-network/allora-chain.git
+    cd allora-chain && make all
+    allorad version
+
+    # 钱包恢复或新建选择
+    echo "请选择操作："
+    echo "1) 恢复钱包"
+    echo "2) 新建钱包"
+    read -p "输入 1 或 2: " wallet_choice
+
+    case $wallet_choice in
+        1)
+            echo "请输入助记词密码进行恢复："
+            allorad keys add testkey --recover
+            ;;
+        2)
+            echo "正在新建钱包..."
+            allorad keys add testkey
+            ;;
+        *)
+            echo "无效选择，请输入 1 或 2。"
+            sleep 2
+            handle_allora
+            ;;
+    esac
+
+    echo "Allora 处理和钱包操作已完成。请重新登录以使 Docker 权限和 Go 环境变量更改生效。"
 }
 
 # 启动节点
