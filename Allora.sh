@@ -189,8 +189,8 @@ start_node() {
     nano app.py
 
     echo "运行 Worker..."
-    chmod +x init.config
-    ./init.config
+    chmod +x init.sh
+    ./init.sh
 
     echo "配置完成后，请按任意键继续..."
     read -p "按任意键返回到主菜单..." -n1 -s
