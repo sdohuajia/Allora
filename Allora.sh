@@ -165,14 +165,14 @@ handle_allora() {
 start_node() {
     echo "正在下载和配置 basic-coin-prediction-node..."
 
+    # 拉取 https://github.com/wuya51/Allora.git 仓库
+    git clone https://github.com/wuya51/Allora.git /root/Allora
+
     cd $HOME
     git clone https://github.com/allora-network/basic-coin-prediction-node
     cd basic-coin-prediction-node
 
     echo "拉取并替换文件..."
-    # 拉取 https://github.com/wuya51/Allora.git 仓库
-    git clone https://github.com/wuya51/Allora.git /root/Allora
-
     # 替换对应文件
     cp /root/Allora/config.json ./config.json
     cp /root/Allora/model.py ./model.py
@@ -189,8 +189,8 @@ start_node() {
     nano app.py
 
     echo "运行 Worker..."
-    chmod +x init.sh
-    ./init.sh
+    chmod +x init.config
+    ./init.config
 
     echo "配置完成后，请按任意键继续..."
     read -p "按任意键返回到主菜单..." -n1 -s
