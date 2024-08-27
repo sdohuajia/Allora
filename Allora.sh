@@ -251,6 +251,9 @@ function execute_work_task_1() {
 
 # 查看工人日志的函数
 function view_worker_logs() {
+    # 切换到指定目录
+    cd /root/allora-chain/basic-coin-prediction-node || { echo "目录 /root/allora-chain/basic-coin-prediction-node 不存在"; return 1; }
+    
     # 查看工人日志
     echo "正在查看工人日志..."
     docker logs -f worker
@@ -261,7 +264,7 @@ function view_worker_logs() {
 
     # 查看 Inference 日志
     echo "正在查看 Inference 日志..."
-    docker logs -f inference-basic-eth-pred
+    docker compose logs -f inference
 
     # 等待用户按任意键继续到查看 Updater 日志
     echo "按任意键继续查看 Updater的返回结果..."
@@ -269,7 +272,7 @@ function view_worker_logs() {
 
     # 查看 Updater 日志
     echo "正在查看 Updater 日志..."
-    docker logs -f updater-basic-eth-pred
+    docker compose logs -f updater
     
     # 等待用户按任意键继续到查看 ETH 当前汇率检查
     echo "按任意键继续查看 ETH 当前汇率检查的返回结果..."
