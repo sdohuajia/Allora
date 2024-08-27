@@ -257,35 +257,28 @@ function view_worker_logs() {
     # 查看工人日志
     echo "正在查看工人日志..."
     docker logs -f worker
-
-    # 等待用户按任意键继续到查看 Inference 日志
-    echo "按任意键继续查看 Inference 日志..."
+    echo "工人日志查看完成。按任意键继续..."
     read -n 1 -s
 
     # 查看 Inference 日志
     echo "正在查看 Inference 日志..."
     docker compose logs -f inference
-
-    # 等待用户按任意键继续到查看 Updater 日志
-    echo "按任意键继续查看 Updater的返回结果..."
+    echo "Inference 日志查看完成。按任意键继续..."
     read -n 1 -s
 
     # 查看 Updater 日志
     echo "正在查看 Updater 日志..."
     docker compose logs -f updater
-    
-    # 等待用户按任意键继续到查看 ETH 当前汇率检查
-    echo "按任意键继续查看 ETH 当前汇率检查的返回结果..."
+    echo "Updater 日志查看完成。按任意键继续..."
     read -n 1 -s
-    
+
     # 使用 curl 查看 ETH 当前汇率检查
     echo "正在查看 ETH 当前汇率检查的返回结果..."
     curl -s http://localhost:8000/inference/ETH
-
-    # 等待用户按任意键返回主菜单
-    echo "按任意键返回主菜单..."
+    echo "ETH 当前汇率检查完成。按任意键返回主菜单..."
     read -n 1 -s
 }
+
 
 # 主菜单函数
 function main_menu() {
