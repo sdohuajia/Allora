@@ -136,9 +136,10 @@ function install_and_configure_allorad() {
             ;;
     esac
 
-   # 等待用户按任意键返回主菜单
-   echo "按任意键返回主菜单..."
-   read -n 1 -s
+    # 等待用户按任意键返回主菜单
+    echo "按任意键返回主菜单..."
+    read -n 1 -s
+}
 
 # 检查 Allorad 安装是否正常的函数
 function check_installation() {
@@ -202,7 +203,7 @@ function check_installation() {
         echo "检查结果: $result"
     fi
 
-    # 等待用户按任意键返回主菜单栏
+    # 等待用户按任意键返回主菜单
     echo "按任意键返回主菜单..."
     read -n 1 -s
 }
