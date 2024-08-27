@@ -88,7 +88,7 @@ function install_and_configure_allorad() {
         # 安装 Go
         cd $HOME
         ver="1.21.3"
-        wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
+        wget https://mirrors.tuna.tsinghua.edu.cn/golang/go1.21.3.linux-amd64.tar.gz
         sudo rm -rf /usr/local/go
         sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
         rm "go$ver.linux-amd64.tar.gz"
