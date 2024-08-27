@@ -253,7 +253,7 @@ function execute_work_task_1() {
 function view_worker_logs() {
     # 查看工人日志
     echo "正在查看工人日志..."
-    docker compose logs -f worker
+    docker logs -f worker
 
     # 等待用户按任意键继续到查看 Inference 日志
     echo "按任意键继续查看 Inference 日志..."
@@ -261,14 +261,22 @@ function view_worker_logs() {
 
     # 查看 Inference 日志
     echo "正在查看 Inference 日志..."
-    docker compose logs -f inference
+    docker logs -f inference-basic-eth-pred
 
-    # 等待用户按任意键继续到查看 Inference 请求
-    echo "按任意键继续查看 Inference 请求的返回结果..."
+    # 等待用户按任意键继续到查看 Updater 日志
+    echo "按任意键继续查看 Updater的返回结果..."
     read -n 1 -s
 
-    # 使用 curl 查看 Inference 请求的返回结果
-    echo "正在查看 Inference 请求的返回结果..."
+    # 查看 Updater 日志
+    echo "正在查看 Updater 日志..."
+    docker logs -f updater-basic-eth-pred
+    
+    # 等待用户按任意键继续到查看 ETH 当前汇率检查
+    echo "按任意键继续查看 ETH 当前汇率检查的返回结果..."
+    read -n 1 -s
+    
+    # 使用 curl 查看 ETH 当前汇率检查
+    echo "正在查看 ETH 当前汇率检查的返回结果..."
     curl -s http://localhost:8000/inference/ETH
 
     # 等待用户按任意键返回主菜单
