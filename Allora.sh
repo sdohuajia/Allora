@@ -288,8 +288,8 @@ function main_menu() {
         echo "退出脚本，请按键盘ctrl c退出即可"
         echo "请选择要执行的操作:"
         echo "1) 安装和配置 Allorad 节点"
-        echo "2) 检查 Allorad 安装是否正常"
-        echo "3) 执行工作任务 1"
+        echo "2) 执行工作任务 1"
+        echo "3) 检查 Allorad 安装是否正常"
         echo "4) 查看日志"
         echo "5) 退出"
         echo "================================================================"
@@ -300,10 +300,10 @@ function main_menu() {
                 install_and_configure_allorad
                 ;;
             2)
-                check_installation
+                execute_work_task_1 
                 ;;
             3)
-                execute_work_task_1
+                check_installation
                 ;;
             4)
                 view_worker_logs
