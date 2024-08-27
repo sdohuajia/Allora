@@ -252,6 +252,9 @@ function execute_work_task_1() {
 # 查看工人日志的函数
 function view_worker_logs() {
     
+    # 切换到指定目录
+    cd /root/allora-chain/basic-coin-prediction-node || { echo "目录 /root/allora-chain/basic-coin-prediction-node 不存在"; return 1; }
+    
     # 查看工人日志
     echo "正在查看工人日志..."
     docker compose logs -f worker
