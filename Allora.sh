@@ -255,20 +255,20 @@ function view_worker_logs() {
     cd /root/allora-chain/basic-coin-prediction-node || { echo "目录 /root/allora-chain/basic-coin-prediction-node 不存在"; return 1; }
     
     # 查看工人日志
-    echo "正在查看工人日志..."
-    docker logs -f worker
+    echo "正在查看工人日志... (按 Ctrl+C 停止)"
+    docker logs worker  # 不使用 -f 选项
     echo "工人日志查看完成。按任意键继续..."
     read -n 1 -s
 
     # 查看 Inference 日志
-    echo "正在查看 Inference 日志..."
-    docker compose logs -f inference
+    echo "正在查看 Inference 日志... (按 Ctrl+C 停止)"
+    docker compose logs inference  # 不使用 -f 选项
     echo "Inference 日志查看完成。按任意键继续..."
     read -n 1 -s
 
     # 查看 Updater 日志
-    echo "正在查看 Updater 日志..."
-    docker compose logs -f updater
+    echo "正在查看 Updater 日志... (按 Ctrl+C 停止)"
+    docker compose logs updater  # 不使用 -f 选项
     echo "Updater 日志查看完成。按任意键继续..."
     read -n 1 -s
 
