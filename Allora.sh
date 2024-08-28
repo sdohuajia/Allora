@@ -298,6 +298,7 @@ function main_menu() {
         echo "4) 查看日志"
         echo "5) 退出"
         echo "================================================================"
+        echo -n "请输入选项 [1-5]: "
         read -r choice
 
         case $choice in
