@@ -213,17 +213,16 @@ function check_installation() {
     read -n 1 -s
 }
 
-# 执行工作任务 1 的函数
 function execute_work_task_1() {
     echo "正在执行工作任务 1..."
 
     # 克隆 basic-coin-prediction-node 仓库并进入目录
-    cd $HOME
-    git clone https://github.com/allora-network/basic-coin-prediction-node
-    cd basic-coin-prediction-node
+    cd $HOME || { echo "无法进入 $HOME 目录"; exit 1; }
+    git clone https://github.com/allora-network/basic-coin-prediction-node || { echo "克隆仓库失败"; exit 1; }
+    cd basic-coin-prediction-node || { echo "无法进入 basic-coin-prediction-node 目录"; exit 1; }
 
     # 删除旧的配置文件并提示用户创建新的配置文件
-    rm -rf config.json
+    rm -f config.json
     echo "请提供 addressRestoreMnemonic 和 Polkachu RPC 信息。"
     echo "请在下面的配置文件中填写这些信息："
     echo "{"
@@ -238,16 +237,13 @@ function execute_work_task_1() {
     echo
 
     # 创建目录、设置权限，并执行 init.config
-    mkdir worker-data
+    mkdir -p worker-data
     chmod +x init.config
-    ./init.config
+    ./init.config || { echo "初始化配置失败"; exit 1; }
 
     # 构建并启动 Docker 容器
-    echo "正在构建 Docker 镜像..."
-    docker compose build
-
-    echo "正在启动 Docker 容器..."
-    docker compose up -d
+    echo "正在构建并启动 Docker 容器..."
+    docker compose up --build -d || { echo "启动 Docker 容器失败"; exit 1; }
 
     # 提示用户按任意键返回主菜单
     read -p "Docker 容器启动完成，请按任意键返回主菜单..." -n1 -s
