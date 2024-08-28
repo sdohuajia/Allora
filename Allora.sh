@@ -108,7 +108,12 @@ function install_and_configure_allorad() {
 
         # 克隆 Allorad 仓库并编译
         git clone https://github.com/allora-network/allora-chain.git
-        cd allora-chain && make all
+        cd allora-chain || { echo "无法进入 allora-chain 目录"; exit 1; }
+        make all
+
+        # 确保 Allorad 可执行文件路径在 PATH 中
+        echo "export PATH=\$PATH:$HOME/allora-chain/bin" >> $HOME/.bash_profile
+        source $HOME/.bash_profile
 
         # 验证 Allorad 安装
         allorad version
