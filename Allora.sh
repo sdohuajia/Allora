@@ -273,11 +273,11 @@ function view_worker_logs() {
     docker compose logs -f inference
     
     # 等待用户按任意键继续到查看 Inference 请求
-    echo "按任意键继续查看 Inference 请求的返回结果..."
+    echo "按任意键继续查看 ETH 请求的返回结果..."
     read -n 1 -s
     
-    # 使用 curl 查看 Inference 请求的返回结果
-    echo "正在查看 Inference 请求的返回结果..."
+    # 使用 curl 查看 ETH 请求的返回结果
+    echo "正在查看 ETH 请求的返回结果..."
     curl -s http://localhost:8000/inference/ETH
    
     # 等待用户按任意键返回主菜单
