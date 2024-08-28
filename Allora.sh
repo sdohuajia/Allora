@@ -133,7 +133,7 @@ function install_and_configure_allorad() {
             allorad keys add testkey
             ;;
         2)
-            echo "导入现有钱包..."
+            echo "导入现有钱包(24位)..."
             allorad keys add testkey --recover
             ;;
         *)
