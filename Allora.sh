@@ -96,7 +96,7 @@ function deploy_node() {
         "alloraHomeDir": "/root/.allorad",
         "gas": "1000000",
         "gasAdjustment": 1.0,
-        "nodeRpc": "https://rpc.ankr.com/allora_testnet",
+        "nodeRpc": "https://allora-testnet-rpc.polkachu.com/",
         "maxRetries": 1,
         "delay": 1,
         "submitTx": false
@@ -188,8 +188,8 @@ function deploy_node() {
 EOF
 
     # 用钱包名称替换 testkey
-    wallet_name=$(allorad keys list | grep -o 'testkey')
-    sed -i "s/testkey/$wallet_name/g" config.json
+    # wallet_name=$(allorad keys list | grep -o 'testkey')
+    # sed -i "s/testkey/$wallet_name/g" config.json
 
     # 如果 env 文件不存在，则创建
     if [ ! -f /root/allora-huggingface-walkthrough/worker-data/env_file ]; then
