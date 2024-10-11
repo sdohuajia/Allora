@@ -14,11 +14,15 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
         echo "1) 部署节点"
-        echo "2) 退出"
+        echo "2) 查看 Worker 容器日志"
+        echo "3) 查看 Main 日志"
+        echo "4) 退出"
         read -p "输入选项: " option
         case $option in
             1) deploy_node;;
-            2) exit 0;;
+            2) view_worker_logs;;
+            3) view_main_logs;;
+            4) exit 0;;
             *) echo "无效选项，请重试";;
         esac
         read -p "按任意键继续..."
@@ -57,10 +61,10 @@ function deploy_node() {
     fi
 
     # 设置 Allora 工作节点
-    echo -e "\e[33m您之前运行过此 Allora 工作节点设置吗？ (是/否)\e[0m"
+    echo -e "\e[33m您之前运行过此 Allora 工作节点设置吗？ (yes/no)\e[0m"
     read -r has_run_before
 
-    if [ "$has_run_before" == "是" ]; then
+    if [ "$has_run_before" == "yes" ]; then
         cd $HOME && cd basic-coin-prediction-node
         docker compose down -v
         docker container prune -f
@@ -207,6 +211,16 @@ EOF
     chmod +x init.config
     ./init.config
     docker compose up --build -d
+}
+
+# 查看 Worker 容器日志
+function view_worker_logs() {
+    cd $HOME/allora-huggingface-walkthrough && docker compose logs -f worker
+}
+
+# 查看 Main 日志
+function view_main_logs() {
+    cd $HOME/allora-huggingface-walkthrough && docker compose logs -f
 }
 
 # 调用主菜单函数
