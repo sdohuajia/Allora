@@ -79,6 +79,10 @@ function deploy_node() {
     echo -e "\e[33m请输入您的钱包助记词:\e[0m"
     read -r wallet_phrases
 
+    # 请求 Coingecko API 密钥
+    echo -e "\e[33m请输入您的 Coingecko API 密钥:\e[0m"
+    read -r coingecko_api_key
+
     # 在配置中替换钱包助记词并包含主题
     cat <<EOF > config.json
 {
@@ -196,9 +200,8 @@ EOF
     # 设置 worker-data 目录的正确权限
     chmod -R 777 /root/allora-huggingface-walkthrough/worker-data
 
-    # 打开 app.py 进行编辑
-    echo -e "\e[33m请根据需要更新 app.py 中的 Coingecko API。文件将打开以进行编辑。\e[0m"
-    nano app.py
+    # 自动导入 Coingecko API 密钥到 app.py
+    sed -i "s|\"x-cg-demo-api-key\": \".*\"|\"x-cg-demo-api-key\": \"$coingecko_api_key\"|g" app.py
 
     # 运行 Huggingface 工作节点
     chmod +x init.config
@@ -208,4 +211,3 @@ EOF
 
 # 调用主菜单函数
 main_menu
-
