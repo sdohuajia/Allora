@@ -71,6 +71,10 @@ function deploy_node() {
         cd $HOME && rm -rf basic-coin-prediction-node
     fi
 
+    # 克隆 Allora Chain
+    git clone https://github.com/allora-network/allora-chain.git && cd allora-chain && make all
+    cd $HOME
+
     # 克隆并配置 HuggingFace 工作节点
     cd $HOME
     git clone https://github.com/allora-network/allora-huggingface-walkthrough
